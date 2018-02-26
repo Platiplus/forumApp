@@ -1,25 +1,9 @@
-let Post = {
-    findAll(){
-        return new Promise((resolve, reject) => {
-            let uri = "http://localhost:3000/posts";
-            let request = new XMLHttpRequest();
+import Post from './post';
+import ui from './ui';
 
-            request.open("GET", uri, true);
-            request.onload = () => {
-                if (request.status >= 200 && request.status < 400){
-                    resolve(request.response);
-                } 
-            };
-            request.send();
+Post.findAll()
+    .then(ui.renderPosts)
+    .catch(
+        (error) => {
+         console.log(error);
         });
-    }
-}
-
-let ui  = {
-    renderPosts(posts){
-        console.log(posts);
-    }
-}
-
-
-Post.findAll().then(ui.renderPosts);
