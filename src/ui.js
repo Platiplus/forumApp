@@ -1,3 +1,4 @@
+import xss from 'xss-filters';
 let ui  = {
     renderPosts(posts){
         let elements = posts.map((post) => {
@@ -10,9 +11,11 @@ let ui  = {
 }
 
 function articleTemplate (title, lastReply) { 
+    let safeTitle = xss.inHTMLData(title);
+    let safeLastReply = xss.inHTMLData(lastReply);
     let template = `<article class = 'post'>
-                    <h2 class = 'post-title'>${title}</h2>
-                    <p class = 'post-meta'>${lastReply}</p>
+                    <h2 class = 'post-title'>${safeTitle}</h2>
+                    <p class = 'post-meta'>${safeLastReply}</p>
                     </article>`;
                     return template;
                 }
