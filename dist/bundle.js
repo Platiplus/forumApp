@@ -1100,6 +1100,40 @@ exports.uriFragmentInHTMLData = exports.uriComponentInHTMLData;
 exports.uriFragmentInHTMLComment = exports.uriComponentInHTMLComment;
 
 },{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _constants = require("./constants");
+
+var API = {
+    fetch: function fetch(path) {
+        return new Promise(function (resolve, reject) {
+            var uri = _constants.BASE_URI + "/" + path;
+            var request = new XMLHttpRequest();
+
+            request.open("GET", uri, true);
+
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 400) {
+                    resolve(JSON.parse(request.response));
+                }
+            };
+
+            request.onerror = function () {
+                reject(new Error("Something went wrong on the API!"));
+            };
+
+            request.send();
+        });
+    }
+};
+
+exports.default = API;
+
+},{"./constants":4}],3:[function(require,module,exports){
 'use strict';
 
 var _post = require('./post');
@@ -1124,38 +1158,58 @@ _user2.default.findRecent().then(_ui2.default.renderUsers).catch(function (error
     console.log(error);
 });
 
-},{"./post":3,"./ui":4,"./user":5}],3:[function(require,module,exports){
+},{"./post":5,"./ui":6,"./user":7}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var BASE_URI = "http://localhost:3000";
+
+exports.BASE_URI = BASE_URI;
+
+},{}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _api = require("./api");
+
+var _api2 = _interopRequireDefault(_api);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var Post = {
     findAll: function findAll() {
-        return new Promise(function (resolve, reject) {
-            var uri = "http://localhost:3000/posts";
-            var request = new XMLHttpRequest();
+        return _api2.default.fetch("posts");
+        //         return new Promise((resolve, reject) => {
+        //             let uri = "http://localhost:3000/posts";
+        //             let request = new XMLHttpRequest();
 
-            request.open("GET", uri, true);
+        //             request.open("GET", uri, true);
 
-            request.onload = function () {
-                if (request.status >= 200 && request.status < 400) {
-                    resolve(JSON.parse(request.response));
-                }
-            };
+        //             request.onload = () => {
+        //                 if (request.status >= 200 && request.status < 400){
+        //                     resolve(JSON.parse(request.response));
+        //                 } 
+        //             };
 
-            request.onerror = function () {
-                reject(new Error("Something went wrong on the API!"));
-            };
+        //             request.onerror = () => {
+        //                 reject(new Error("Something went wrong on the API!"));
+        //             }
 
-            request.send();
-        });
+        //             request.send();
+        //         });
+        //     }
+        // }
     }
 };
 
 exports.default = Post;
 
-},{}],4:[function(require,module,exports){
+},{"./api":2}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1210,35 +1264,25 @@ function articleTemplate(title, lastReply) {
 
 exports.default = ui;
 
-},{"xss-filters":1}],5:[function(require,module,exports){
+},{"xss-filters":1}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _api = require("./api");
+
+var _api2 = _interopRequireDefault(_api);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var User = {
     findRecent: function findRecent() {
-        return new Promise(function (resolve, reject) {
-            var uri = "http://localhost:3000/activeUsers";
-            var request = new XMLHttpRequest();
-
-            request.open("GET", uri, true);
-
-            request.onload = function () {
-                if (request.status >= 200 && request.status < 400) {
-                    resolve(JSON.parse(request.response));
-                }
-            };
-
-            request.onerror = function () {
-                reject(new Error("Something went wrong on the API!"));
-            };
-
-            request.send();
-        });
+        return _api2.default.fetch("activeUsers");
     }
 };
 
 exports.default = User;
 
-},{}]},{},[2]);
+},{"./api":2}]},{},[3]);
